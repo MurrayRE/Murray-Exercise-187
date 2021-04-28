@@ -1,0 +1,198 @@
+//#AUTHOR: Rayna Murray
+//#COURSE: CPT 187
+//#PURPOSE: This program adds new User Accounts and passwords when a new user is created.
+//#PURPOSE:  It also tracks given information to prevent recreation of the same account. 
+//#STARTDATE: 4.21.2021
+
+package edu.cpt187.murray.exercise6;
+
+//IMPORT File Input Stream
+import java.io.FileInputStream;
+
+//IMPORT File Writer
+import java.io.FileWriter;
+
+//IMPORT IO Exception
+import java.io.IOException;
+
+//IMPORT Print Writer
+import java.io.PrintWriter;
+
+//IMPORT Scanner
+import java.util.Scanner;
+
+//START Supportive Class
+public class UserAccounts 
+{	
+	//NOTE: These are attributes of our object - our Object = Order
+	//declare and initialize class CONSTANTS
+	//These constants must be REQUIRED by the object attributes
+	private final int NOT_FOUND = -1;
+	private final int RESET_VALUE = 0;
+	private final int MAXIMUM_RECORDS = 50;
+	
+	//declare and initialize all non-CONSTANT class attributes 
+	private String[] userNames = new String[MAXIMUM_RECORDS];
+	private String[] passwords = new String[MAXIMUM_RECORDS];
+	private String masterFileName = "";
+	private int recordCount = 0;
+	private int searchedIndex = 0;
+	
+	//The WriteOrder class constructor
+	public UserAccounts(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}//End of WriteOrder class constructor
+	
+	//This setter "Sets" the proper attribute to a new value.
+	//NOTE: Setters are Void Methods - These do not return a value
+	
+	//SETTERS
+	//START User Account Arrays
+	//This method will ASSIGN a new value to setUserAccountArrays
+	public void setUserAccountArrays()
+	{
+		//Reset local RecordCount
+		recordCount = RESET_VALUE;
+		
+		//START Try
+		try
+		{
+			Scanner infile = new Scanner(new FileInputStream(masterFileName));
+
+			//START while (infile.hasNext() == true && recordCount < MAXIMUM_RECORDS) 
+			while (infile.hasNext() == true && recordCount < MAXIMUM_RECORDS) 
+			{
+				userNames[recordCount] = infile.next();
+				passwords[recordCount] = infile.next(); 
+				
+				recordCount++;
+			}//END while (infile.hasNext() == true && recordCount < MAXIMUM_RECORDS)
+
+			//Close File
+			infile.close();
+		}//End Try
+
+		//START catch
+		catch (IOException ex)
+		{
+			recordCount = NOT_FOUND;
+		}//End Catch
+	}//END User Account Arrays
+		
+	//START Searched Index
+	//This method will ASSIGN a new value to setSearchedIndex
+	public void setSearchedIndex(String borrowedUserName)
+	{
+		searchedIndex = getSeqSearch(borrowedUserName);
+	}//END Searched Index
+	
+	//START Searched Index - OVERLOADED
+	//This method will ASSIGN a new value to setSearchedIndex 
+	public void setSearchedIndex(String borrowedUserName, String borrowedPassword)
+	{
+		searchedIndex = getSeqSearch(borrowedUserName);
+
+		//START if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
+		if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
+		{			
+			searchedIndex = NOT_FOUND;
+		}//END if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false) 
+	}//END Searched Index
+	
+	//START Write One Record
+	//This method will ASSIGN a new value to setWriteOneRecord
+	public void setWriteOneRecord(String borrowedUserName, String borrowedPassword)
+	{
+		//START Try
+		try
+		{
+
+			//Instantiate FileWriter
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+
+			//Write a record
+			filePW.printf("%n%s\t%s%n", borrowedUserName, borrowedPassword);
+			
+			//increment count 
+			recordCount ++;	
+			
+			//Close File
+			filePW.close();
+
+		}//End Try
+
+		//Error catch if file not found or cannot be opened 
+		catch (IOException ex) 
+		{//Begin Catch
+			recordCount = NOT_FOUND;
+		}//End Catch
+	}
+	//NOTE: These will return a value
+	//GETTERS
+	
+	//START Seq Search
+	//This method will ASSIGN a new value to Seq Search
+	public int getSeqSearch(String borrowedBorrowedUserName)
+	{
+		//Local Variables
+		int localIndex = 0;
+		int found = NOT_FOUND;
+
+		//START while (localIndex < recordC
+		while (localIndex < recordCount)
+		{
+
+			//START if (borrowedborrowedUserName.equalsIgnoreCase(userNames[localIndex]))
+			if (borrowedBorrowedUserName.equalsIgnoreCase(userNames[localIndex]))
+			{
+				found = localIndex;
+				localIndex = recordCount;
+			}//END if (borrowedborrowedUserName.equalsIgnoreCase(userNames[localIndex]))
+			
+			//START else
+			else
+			{
+				localIndex++;
+			}//END else
+		}//END while (localIndex < recordC
+
+		//Return Results
+		return found;
+	}//END Seq Search
+	
+	//START Password Match
+	//This method will ASSIGN a new value to Password Match
+	public boolean getPasswordMatch(String borrowedBorrowedPassword)
+	{
+		return borrowedBorrowedPassword.equals(passwords[searchedIndex]);
+	}//END Password Match
+	
+	//START File Name
+	//This method will ASSIGN a new value to File Name
+	public String getFileName()
+	{
+		return masterFileName;
+	}//END File Name
+	
+	//START Maximum Records
+	//This method will ASSIGN a new value to Maximum Records
+	public int getMaximumRecords()
+	{
+		return MAXIMUM_RECORDS;
+	}//END Maximum Records
+	
+	//START Record Count
+	//This method will ASSIGN a new value to Record Count
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//END Record Count
+	
+	//START Searched Index
+	//This method will ASSIGN a new value to Searched Index
+	public int getSearchedIndex()
+	{
+		return searchedIndex;
+	}//END Searched Index
+}//END of UserAccounts Class
