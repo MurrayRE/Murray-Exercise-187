@@ -1,0 +1,90 @@
+//#AUTHOR: Rayna Murray
+//#COURSE: CPT 187
+//#PURPOSE: This program compiles and organizes information for the order receipt
+//#PURPOSE:  itself to be used by the main program.
+//#STARTDATE: 4.21.2021
+
+package edu.cpt187.murray.exercise6;
+
+//IMPORT File Writer
+import java.io.FileWriter;
+
+//IMPORT IO Exception
+import java.io.IOException;
+
+//IMPORT Print Writer
+import java.io.PrintWriter;
+
+//START Supportive Class
+public class WriteOrder 
+{	
+	//NOTE: These are attributes of our object - our Object = Order
+	//declare and initialize class CONSTANTS
+	//These constants must be REQUIRED by the object attributes
+
+	//declare and initialize all non-CONSTANT class attributes 
+	private boolean fileFoundFlag = false;
+	private String masterFileName = "";
+	private int recordCount = 0;
+	
+	//The WriteOrder class constructor
+	public WriteOrder(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}//End of WriteOrder class constructor
+	
+	//This setter "Sets" the proper attribute to a new value.
+	//NOTE: Setters are Void Methods - These do not return a value
+	
+	//SETTERS
+	//This method will ASSIGN a new value to setWriteOrder
+	public void setWriteOrder(int borrowedItemID, String borrowedItemName, double borrowedItemPrice, int borrowedQuantity, double borrowedOrderCost)
+	{
+		//START Try
+		try
+		{
+			//Instantiate FileWriter
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+
+			//Write a record
+			filePW.printf("%n%d\t%s\t%f\t%d\t%.2f%n", borrowedItemID, borrowedItemName, borrowedItemPrice, borrowedQuantity,borrowedOrderCost);
+			fileFoundFlag = true;
+			//Close File
+			filePW.close();
+			//increment recordCount 
+			recordCount++; 
+		}//End Try
+
+		//Error catch
+		
+		catch (IOException ex) 
+		{//Begin Catch
+			fileFoundFlag = false;
+		}//End Catch
+	}//END Write Order
+		
+	//NOTE: These will return a value
+	//GETTERS
+		
+	//START File Found
+	//This method will ASSIGN a new value to File Found
+	public boolean getFileFoundFlag()
+	{
+		return fileFoundFlag;
+	}//END File Found
+	
+	
+	//START File Name
+	//This method will ASSIGN a new value to File Name
+	public String getFileName()
+	{
+		return masterFileName;
+	}//END File Name
+	
+	//START Record Count
+	//This method will ASSIGN a new value to Record Count
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//END Record Count
+}//END of WriteOrder Class
